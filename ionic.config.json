@@ -1,0 +1,7 @@
+{
+  "name": "vue-wtflags",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
