@@ -2,9 +2,9 @@
   <div class="difficulty-container">
     <h1>WTFlags</h1>
     <div class="select-container">
-      <ion-label>{{ $t('difficulty') }}</ion-label>
-      <ion-select :value="difficulty" aria-label="{{$t('choose_difficulty')}}" interface="popover"
-                  @select="changeDifficulty($event)">
+      <ion-select :label="$t('difficulty')" v-model="difficulty" aria-label="{{$t('choose_difficulty')}}"
+                  interface="popover"
+                  @ionChange="changeDifficulty" label-placement="floating">
         <ion-select-option value="0">
           {{ $t('easy') }}
         </ion-select-option>
@@ -19,7 +19,9 @@
         </ion-select-option>
       </ion-select>
     </div>
-    <ion-button color="primary">{{ $t('start') }}</ion-button>
+    <div class="start-container">
+    <ion-button color="primary" expand="block" @click="$router.push('/Game')">{{ $t('start') }}</ion-button>
+    </div>
     <footer class="container-flags">
       <button v-for="(lang, i) in langs" :key="i" @click="changeLanguage($i18n, lang.code)">
         <img
@@ -33,18 +35,20 @@
 </template>
 
 <script lang="ts" setup>
-import {IonButton, IonLabel, IonSelect, IonSelectOption} from '@ionic/vue';
+import {IonButton, IonSelect, IonSelectOption} from '@ionic/vue';
 import {ExportedGlobalComposer} from "vue-i18n";
+import {ref} from "vue";
 
-const difficulty: string = '0';
+const difficulty = ref(localStorage.getItem('difficulty') || '0');
 const langs: any[] = [
   {code: 'en', flag: 'gb', name: 'English'},
   {code: 'es', flag: 'es', name: 'Spanish'},
   {code: 'kr', flag: 'kr', name: 'Korean'}
 ];
 
-function changeDifficulty({value}: any) {
-  localStorage.setItem('difficulty', value);
+function changeDifficulty() {
+  console.log(difficulty.value)
+  localStorage.setItem('difficulty', difficulty.value);
 }
 
 function changeLanguage(i18n: ExportedGlobalComposer, langCode: string) {
@@ -62,8 +66,12 @@ function changeLanguage(i18n: ExportedGlobalComposer, langCode: string) {
   margin-top: 15vh;
 }
 
-button, .select-container {
+.select-container, .start-container {
   width: clamp(300px, 50%, 600px);
+}
+
+ion-button {
+  text-transform: none;
 }
 
 h1 {
